@@ -5,16 +5,8 @@ package fpinscala.gettingstarted
 /** A documentation comment */
 object MyModule {
   def abs(n: Int): Int =
-    if (n < 0) -n
-    else n
-
-  private def formatAbs(x: Int) = {
-    val msg = "The absolute value of %d is %d"
-    msg.format(x, abs(x))
-  }
-
-  def main(args: Array[String]): Unit =
-    println(formatAbs(-42))
+  if (n < 0) -n
+  else n
 
   // A definition of factorial, using a local, tail recursive function
   def factorial(n: Int): Int = {
@@ -36,7 +28,19 @@ object MyModule {
 
   // Exercise 1: Write a function to compute the nth fibonacci number
 
-  def fib(n: Int): Int = ???
+  def fib(n: Int): Int = {
+    def fib1(n: Int): Int = {
+      if (n == 0) 0
+      else if (n == 1) 1
+      else fib1(n -1) + fib1(n -2)
+    }
+    fib1(n)
+  }
+
+  private def formatAbs(x: Int) = {
+    val msg = "The absolute value of %d is %d"
+    msg.format(x, abs(x))
+  }
 
   // This definition and `formatAbs` are very similar..
   private def formatFactorial(n: Int) = {
@@ -50,6 +54,9 @@ object MyModule {
     val msg = "The %s of %d is %d."
     msg.format(name, n, f(n))
   }
+
+  def main(args: Array[String]): Unit =
+    println(formatAbs(-42))
 }
 
 object FormatAbsAndFactorial {
@@ -140,7 +147,15 @@ object PolymorphicFunctions {
 
   // Exercise 2: Implement a polymorphic function to check whether
   // an `Array[A]` is sorted
-  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = ???
+  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = {
+    @annotation.tailrec
+    def loop(n: Int): Boolean = {
+      if (n + 1 >= as.length) true
+      else if (gt(as(n), as(n + 1))) false
+      else loop(n + 1)
+    }
+    loop(0)
+  }
 
   // Polymorphic functions are often so constrained by their type
   // that they only have one implementation! Here's an example:
